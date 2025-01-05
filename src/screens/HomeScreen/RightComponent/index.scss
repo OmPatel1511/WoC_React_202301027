@@ -1,0 +1,75 @@
+.right-container{
+    padding: 20px;
+    .header{
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid black;
+        .add-folder{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            background-color: white;
+            cursor: pointer;
+        }
+        .title{
+            font-weight: 600;
+            font-size: 30px;
+            span{
+                font-weight: 400;
+            }
+        }
+    }
+    .folder-container{
+        .folder-header{
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+            border-bottom: 1px solid black;
+            .folder-header-item{
+                display: flex;
+                gap: 20px;
+                align-items: center;
+                span{
+                    cursor: pointer;
+                }
+                button{
+                    background-color: white;
+                    border: none;
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+            }
+        }
+        .cards-container{
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            .card{
+                transition-duration: 0.5s;
+                display: flex;
+                width: 43%;
+                cursor: pointer;
+                box-shadow: 2px 2px 5px gray;
+                gap: 10px;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px;
+                img{
+                    width: 50px;
+                }
+                .title-container{
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+            .card:hover{
+                outline: 8px solid white;
+            }
+        }
+    }
+}
