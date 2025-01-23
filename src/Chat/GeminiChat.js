@@ -19,7 +19,7 @@ export const GeminiChat = () => {
       try {
         setLoading(true);
         const response = await axios.post(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyC6Yfqw9JC8vsmgEkIDe6RJ4LscPuiq6aU',
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=REACT_APP_GEMINI_API_KEY',
           {
             contents: [
               {
