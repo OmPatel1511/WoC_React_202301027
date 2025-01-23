@@ -1,28 +1,23 @@
-import { useParams } from "react-router-dom";
 import "./index.scss";
-import { EditorContainer } from "./EditorContainer";
 import { useCallback, useState } from "react";
 import { makeSubmission } from "./service";
-import ReactMarkdown from "react-markdown";
+import { EditorContainer1 } from "./EditorContainer1";
 import { FaPaperPlane } from "react-icons/fa";
+import ReactMarkdown from "react-markdown";
+import axios from 'axios';
 
-export const PlaygroundScreen = () => {
-  const params = useParams();
-  const { fileId, folderId } = params;
-
+export const PlaygroundScreen1 = () => {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [showLoader, setShowLoader] = useState(false);
-
-  // Chatbot States
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [messages, setMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
-
-  // Import Input
+    const [loading, setLoading] = useState(false);
   const importInput = (e) => {
     const file = e.target.files[0];
-    if (file.type.includes("text")) {
+    const fileType = file.type.includes("text");
+    if (fileType) {
       const fileReader = new FileReader();
       fileReader.readAsText(file);
       fileReader.onload = (e) => {
@@ -33,7 +28,6 @@ export const PlaygroundScreen = () => {
     }
   };
 
-  // Export Output
   const exportOutput = () => {
     const outputValue = output.trim();
     if (!outputValue) {
@@ -48,24 +42,23 @@ export const PlaygroundScreen = () => {
     link.click();
   };
 
-  // Callback for API Submission
-  const callback = ({ apiStatus, data }) => {
+  const callback = ({ apiStatus, data, message }) => {
     if (apiStatus === "loading") {
       setShowLoader(true);
     } else if (apiStatus === "error") {
       setShowLoader(false);
       setOutput("Something went wrong");
     } else {
-      setShowLoader(false);
       if (data.status.id === 3) {
+        setShowLoader(false);
         setOutput(atob(data.stdout));
       } else {
+        setShowLoader(false);
         setOutput(atob(data.stderr));
       }
     }
   };
 
-  // Run Code Handler
   const runCode = useCallback(
     ({ code, language }) => {
       makeSubmission({ code, language, stdin: input, callback });
@@ -73,48 +66,50 @@ export const PlaygroundScreen = () => {
     [input]
   );
 
-  // Chatbot Message Handler
   const handleSendMessage = async () => {
     if (chatInput.trim()) {
       const newMessages = [...messages, { text: chatInput, user: true }];
       setMessages(newMessages);
-      setChatInput("");
+      setInput('');
 
       try {
-        const response = await fetch(
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyC6Yfqw9JC8vsmgEkIDe6RJ4LscPuiq6aU",
+        setLoading(true);
+        const response = await axios.post(
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyC6Yfqw9JC8vsmgEkIDe6RJ4LscPuiq6aU',
           {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: chatInput }] }],
-            }),
+            contents: [
+              {
+                parts: [
+                  {
+                    text: chatInput,
+                  },
+                ],
+              },
+            ],
           }
         );
-
-        const data = await response.json();
-        const botResponse =
-          data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
+        console.log(response);
+        const botResponse = response.data.candidates[0].content.parts[0].text;
+        setLoading(false);
         setMessages([...newMessages, { text: botResponse, user: false }]);
       } catch (error) {
-        setMessages([
-          ...newMessages,
-          { text: "Error: Could not get a response from AI", user: false },
-        ]);
+        console.error('Error sending message:', error);
+        setLoading(false);
+        setMessages([...newMessages, { text: 'Error: Could not get response from AI', user: false }]);
       }
     }
   };
 
   return (
     <div className="playground-container">
-      <div className="header-container">
-        <img src="/logo.png" className="logo" alt="Logo" />
+      <div className="header-container1">
+        <nav>
+          <button className="btn-login">Login</button>
+        </nav>
       </div>
       <div className="content-container">
         <div className="editor-container">
-          <EditorContainer fileId={fileId} folderId={folderId} runCode={runCode} />
+          <EditorContainer1 runCode={runCode} />
         </div>
         <div className="input-output-container">
           <div className="input-header">
@@ -140,8 +135,12 @@ export const PlaygroundScreen = () => {
               <b>Export Output</b>
             </button>
           </div>
-          <textarea readOnly value={output}></textarea>
-          <button className="chat-button" onClick={() => setIsChatVisible(true)}>
+          <textarea readOnly value={output} onChange={(e) => setOutput(e.target.value)}></textarea>
+          {/* Add the Chat Button */}
+          <button
+            className="chat-button"
+            onClick={() => setIsChatVisible(true)}
+          >
             Open Chat
           </button>
         </div>
@@ -151,6 +150,7 @@ export const PlaygroundScreen = () => {
           <div className="loader"></div>
         </div>
       )}
+      {/* Popup Chat Box */}
       {isChatVisible && (
         <div className="chat-popup">
           <div className="chat-header">

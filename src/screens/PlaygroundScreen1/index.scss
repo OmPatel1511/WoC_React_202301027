@@ -1,0 +1,200 @@
+.playground-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .icon-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 4px;
+        cursor: pointer;
+    }
+
+    .content-container {
+        flex-grow: 1;
+        display: grid;
+        gap: 20px;
+        background-color: #1A1A1A;
+        padding: 5px;
+        grid-template-columns: 3fr 2fr;
+    }
+
+    .header-container1 {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 20px;
+        height: 60px;
+        background-color: #1A1A1A;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-login {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-login:hover {
+        background-color: #0056b3;
+    }
+
+    .input-output-container {
+        display: flex;
+        flex-direction: column;
+
+        .input-header {
+            background-color: #EDEDED;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        textarea {
+            flex-grow: 1;
+            border: none;
+            resize: none;
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        textarea:focus {
+            outline: none;
+        }
+
+        button {
+            border: none;
+        }
+
+        /* Chat button styling */
+        .chat-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .chat-button:hover {
+            background-color: #0056b3;
+        }
+    }
+
+    .editor-container {
+        grid-row: 1 / 3;
+    }
+
+    .fullpage-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.534);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            border: 8px solid rgba(255, 99, 71, 0.311);
+            border-left-color: tomato;
+            animation: 0.8s loader infinite linear;
+            border-radius: 50%;
+        }
+    }
+
+    /* Chat popup styling */
+    .chat-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .chat-popup .chat-header {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .chat-popup .chat-header .close-button {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .chat-popup .chat-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 10px;
+        background-color: #f7f7f7;
+    }
+
+    .chat-popup .chat-footer {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+    }
+
+    .chat-popup .chat-footer input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    .chat-popup .chat-footer input:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+    .chat-popup .chat-footer button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .chat-popup .chat-footer button:hover {
+        background-color: #0056b3;
+    }
+}
+
+@keyframes loader {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

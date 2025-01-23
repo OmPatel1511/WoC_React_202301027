@@ -1,8 +1,6 @@
-import { useContext, useRef, useState } from "react"
-import "./EditorContainer.scss"
+import { useRef, useState } from "react"
+import "./EditorContainer1.scss"
 import Editor from "@monaco-editor/react"
-import { PlaygroundContext } from "../../Providers/PlaygrondProvider"
-import { makeSubmission } from "./service"
 const editorOptions={
     fontSize: 18,
     wordWrap: 'on'
@@ -13,12 +11,30 @@ const fileExtensionMapping={
     python:'py',
     java:'java'
 }
-export const EditorContainer=({fileId,folderId,runCode})=>{
-    const {getLanguage,getDefaultCode,updateLanguage,saveCode}=useContext(PlaygroundContext);
+const defaultCodes={
+    'cpp':`#include <iostream>
+int main(){
+    std::cout<<"Hello World";
+    return 0;
+}`,
+    'javascript':`console.log("hello javascript")`,
+    'python':`print("hello python")`,
+    "java":`public class Main{
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+}`
+}
+const getDefaultCode=(language)=>{
+    const nCode=defaultCodes[language];
+    return nCode;
+}
+
+export const EditorContainer1=({runCode})=>{
     const [code,setCode]=useState(()=>{
-        return getDefaultCode(fileId,folderId);
+        return getDefaultCode('cpp');
     });
-    const [language,setLanguage]=useState(()=>getLanguage(fileId,folderId));
+    const [language,setLanguage]=useState('cpp');
     const [theme,setTheme]=useState('vs-dark');
     const codeRef=useRef(code);
     const [isFullScreen,setIsFullScreen]=useState(false);
@@ -45,6 +61,7 @@ export const EditorContainer=({fileId,folderId,runCode})=>{
         }
     };
     
+
     const exportCode=()=>{
         const codeValue=codeRef.current?.trim();
         if(!codeValue){
@@ -58,18 +75,14 @@ export const EditorContainer=({fileId,folderId,runCode})=>{
         link.click();
     }
     const onChangeLanguage=(e)=>{
-        updateLanguage(fileId,folderId,e.target.value);
-        const newCode=getDefaultCode(fileId,folderId);
+        const language=e.target.value;
+        const newCode=getDefaultCode(language);
         setCode(newCode);
         codeRef.current=newCode;
         setLanguage(e.target.value);
     }
     const onChangeTheme=(e)=>{
         setTheme(e.target.value);
-    }
-    const onSaveCode=()=>{
-        saveCode(fileId,folderId,codeRef.current);
-        alert("Code saved Successfully");
     }
     const fullScreen=()=>{
         setIsFullScreen(!isFullScreen);
@@ -79,12 +92,7 @@ export const EditorContainer=({fileId,folderId,runCode})=>{
     }
     return (
         <div className="root-editor-container" style={isFullScreen ? styles.fullScreen:{}}>
-            <div className="editor-header">
-                <div className="editor-left-container">
-                    <b className="title">{"title of the card"}</b>
-                    <span className="material-icons">edit</span>
-                    <button onClick={onSaveCode}>Save Code</button>
-                </div>
+            <div className="editor-header1">
                 <div className="editor-right-container">
                     <select onChange={onChangeLanguage} value={language}>
                         <option value="cpp">CPP</option>

@@ -37,11 +37,13 @@ const Folder=({folderTitle,cards,folderId})=>{
     <div className="cards-container">
         {
             cards?.map((file,index)=>{
-                const onEditFile=()=>{
+                const onEditFile=(e)=>{
+                    e.stopPropagation();
                     setModalPayload({fileId:file.id,folderId:folderId})
                     openModal(modalConstants.UPDATE_FILE_TITLE)
                 };
-                const onDeleteFile=()=>{
+                const onDeleteFile=(e)=>{
+                    e.stopPropagation();
                     deleteFile(folderId,file.id);
                 }
                 const navigateToPlaygroundScreen=()=>{

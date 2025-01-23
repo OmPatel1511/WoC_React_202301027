@@ -142,6 +142,61 @@ export const PlaygroundProvider=({children})=>{
         localStorage.setItem('data',JSON.stringify(copiedFolders));
         setFolders(copiedFolders);
     }
+    const getDefaultCode=(fileId,folderId)=>{
+            for(let i=0;i<folders.length;i++){
+                if(folders[i].id===folderId){
+                    for(let j=0;j<folders[i].files.length;j++){
+                        const currentFile=folders[i].files[j];
+                        if(fileId===currentFile.id){
+                            return currentFile.code;
+                        }
+                    }
+                }
+            }
+    }
+    const getLanguage=(fileId,folderId)=>{
+        for(let i=0;i<folders.length;i++){
+            if(folders[i].id===folderId){
+                for(let j=0;j<folders[i].files.length;j++){
+                    const currentFile=folders[i].files[j];
+                    if(fileId===currentFile.id){
+                        return currentFile.language;
+                    }
+                }
+            }
+        }
+}
+const updateLanguage=(fileId,folderId,language)=>{
+    const newFolders=[...folders]
+    for(let i=0;i<newFolders.length;i++){
+        if(folders[i].id===folderId){
+            for(let j=0;j<newFolders[i].files.length;j++){
+                const currentFile=newFolders[i].files[j];
+                if(fileId===currentFile.id){
+                    newFolders[i].files[j].code=defaultCodes[language]
+                    newFolders[i].files[j].language=language;
+                }
+            }
+        }
+    }
+    localStorage.setItem('data', JSON.stringify(folders));
+    setFolders(newFolders);
+}
+const saveCode=(fileId,folderId,newCode)=>{
+    const newFolders=[...folders]
+    for(let i=0;i<folders.length;i++){
+        if(folders[i].id===folderId){
+            for(let j=0;j<folders[i].files.length;j++){
+                const currentFile=folders[i].files[j];
+                if(fileId===currentFile.id){
+                    newFolders[i].files[j].code=newCode;
+                }
+            }
+        }
+    }
+    localStorage.setItem('data', JSON.stringify(folders));
+    setFolders(newFolders);
+}
     useEffect(() => {
         try {
             if (!localStorage.getItem('data')) {
@@ -161,7 +216,11 @@ export const PlaygroundProvider=({children})=>{
         editFolderTitle,
         editFileTitle,
         deleteFile,
-        createPlayground
+        createPlayground,
+        getDefaultCode,
+        getLanguage,
+        updateLanguage,
+        saveCode
     }
 
     return(
